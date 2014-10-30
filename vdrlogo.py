@@ -73,7 +73,7 @@ def maybetrythis(channel_name,picons,outputpath):
 			googleURL = downloader.google_download(channel_name.replace(" ","+"))
 			run_cmd('wget ' + googleURL + '  -O "' + outputpath + channel_name + '.png"')
 			imagemagix.convert_img(outputpath + channel_name + ".png")
-			time.sleep(0)
+			time.sleep(2)
 
 
 def run_cmd(cmd):
