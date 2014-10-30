@@ -23,6 +23,7 @@ Automated Channel logo downloader for VDR, and XBMC.
 
 <b>Functions:</b>
 
+- <code>-h | --help</code>
 - <code>-c | --channels /path/to/channels.conf</code> <b>Required</b> Path to the VDR generated channels.conf file.
 - <code>-o | --outputpath /path/to/out/folder</code> <b>Required</b> Path to the output folder.
 - <code>-C | --country de|de,hu,it...</code> <b>Required</b> Country code for the lyngsat download.
