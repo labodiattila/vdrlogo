@@ -34,6 +34,7 @@ Automated Channel logo downloader for VDR, and XBMC.
 - <code>-n | --notfoundurl "www.path.to.dummy.pics"</code> <b>Optional</b> Use this logo, if the searching method not found the channel.
 
 <b>Example</b>
+
 <code>./vdrlogo.py -c channels.conf -o output/ -C ro,hu -l yes -g yes -e "DIGI FILM"</code>
 
 I'm not a professional programer, so use at your own risk! :)
