@@ -32,3 +32,5 @@ Automated Channel logo downloader for VDR, and XBMC.
 - <code>-c | --channels /path/to/channels.conf</code> <b>Required</b> Path to the VDR generated channels.conf file.
 - <code>-e | --endline "last channel name"</code> <b>Optional</b> Download logos until this channel. 
 - <code>-n | --notfoundurl "www.path.to.dummy.pics"</code> <b>Optional</b> Use this logo, if the searching method not found the channel.
+
+I'm not a professional programer, so use at your own risk! :)
