@@ -1,19 +1,24 @@
 #!/usr/bin/python
-import vdrlogo,struct
+import vdrlogo,sys,struct
 
-def convert_img(logopath):
-	print(logopath)
-	with open(logopath, 'rb') as f:
+def convert_img(logopath,size):
+	try:
+		vdrlogo.logo_width = int(size.split("x")[0])
+		vdrlogo.logo_height = int(size.split("x")[1])
+	except AttributeError:
+		pass
+	
+	#create white png
+	vdrlogo.run_cmd("convert -size " + str(vdrlogo.logo_width) + "x" + str(vdrlogo.logo_height) + " xc:white bckgr.png")
+
+	#resize
+	vdrlogo.run_cmd('convert -resize ' + str(vdrlogo.logo_width) + 'x' + str(vdrlogo.logo_height)+ ' "' + logopath +'" resized.png')
+
+	with open("resized.png", 'rb') as f:
 		data = f.read()
 	
 	#get size
 	w, h = struct.unpack('>LL', data[16:24])
-	
-	#create white png
-	vdrlogo.run_cmd("convert -size " + str(w) + "x" + str(h) + " xc:white bckgr.png")
 
 	#flatten pngs
-	vdrlogo.run_cmd('convert -flatten bckgr.png "' + logopath + '" temp.png')
-	
-	#resize to 132x99
-	vdrlogo.run_cmd('convert -resize 132x99 temp.png "' + logopath +'"')
+	vdrlogo.run_cmd('convert -page +0+'+ str(vdrlogo.logo_height/2-(h/2)) +' -flatten bckgr.png resized.png "' + logopath + '"')
