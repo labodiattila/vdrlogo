@@ -4,7 +4,7 @@
 Automated Channel logo downloader for VDR, and XBMC.
 
 <b>Main features:</b>
-- Download logos, specified to your country from the lyngsat.
+- Download logos, specified to your country from lyngsat.
 - Download missing channel logos from google
 - Resize logos to standard 132x99px and create white, none transparented background for them.
 - Rename it to match your VDR channel name.
