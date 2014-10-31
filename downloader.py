@@ -28,7 +28,6 @@ def get_urls(source):
 			dirtypath=source[num][firstposition:lastposition+4]
 
 			#Cleaning
-			#source[num]=source[num][firstposition:lastposition+4].replace("_"," ")
 			source[num]=source[num][firstposition:lastposition+4].replace("..","http://www.lyngsat-logo.com")
 
 			#Download
@@ -52,9 +51,8 @@ def get_urls(source):
 			filename = filename.replace("_"," ")
 			filename = filename.replace(" .",".")
 
-			#print(filename)
 			vdrlogo.run_cmd('wget -q '+source[num]+' -O "'+vdrlogo.workfoldername+filename.lower()+'"')
-			#print(source[num])
+			
 
 def google_download(channel_name):
 	url = ('https://ajax.googleapis.com/ajax/services/search/images?' + 'v=1.0&q='+channel_name+'&as_filetype=png&as_sitesearch=http://www.lyngsat-logo.com')
