@@ -19,6 +19,6 @@ def convert_img(logopath,size):
 	
 	#get size
 	w, h = struct.unpack('>LL', data[16:24])
-
+	
 	#flatten pngs
-	vdrlogo.run_cmd('convert -page +0+'+ str(vdrlogo.logo_height/2-(h/2)) +' -flatten bckgr.png resized.png "' + logopath + '"')
+	vdrlogo.run_cmd('convert -page +'+str(vdrlogo.logo_width/2-(w/2))+'+'+ str(vdrlogo.logo_height/2-(h/2)) +' -flatten bckgr.png resized.png "' + logopath + '"')
