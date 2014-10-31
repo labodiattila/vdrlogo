@@ -1,9 +1,10 @@
 #!/usr/bin/python
-import downloader, imagemagix, re, sys, time, argparse, os
+import downloader, imagemagix, re, time, argparse, os
 from subprocess import *
 
+logo_width = 132
+logo_height = 99
 workfoldername = "work/"
-
 lyngsat_logo_URL = "http://www.lyngsat-logo.com/tvcountry/"
 not_found_URL = "http://www.gamescast.tv/press/media/tv.png"
 
@@ -12,7 +13,7 @@ lyngsat_sem = False
 google_sem = False
 show_differences = False
 
-def main(vdrchannels,country_list,outputpath,endline):
+def main(vdrchannels,country_list,outputpath,endline,size):
 		#create work folder, and delete old tempfiles
 		run_cmd("mkdir " + workfoldername)
 		run_cmd("mkdir " + outputpath)
@@ -28,10 +29,10 @@ def main(vdrchannels,country_list,outputpath,endline):
 			downloader.lyngsat_download(country_list)
 
 
-		clearing(channels,os.listdir(workfoldername),outputpath,endline)
+		clearing(channels,os.listdir(workfoldername),outputpath,endline,size)
 
 
-def clearing(channels,picons,outputpath,endline):
+def clearing(channels,picons,outputpath,endline,size):
 	for num in range(0,len(channels)):
 
 		if channels[num].find("->") == -1:
@@ -47,7 +48,7 @@ def clearing(channels,picons,outputpath,endline):
 			else:
 				print("Not Found: "+channel_name)
 				if not show_differences:
-					maybetrythis(channel_name,picons,outputpath)
+					maybetrythis(channel_name,picons,outputpath,size)
 
 def search_and_find(channel_name,picons):
 	for num in range(0,len(picons)):
@@ -55,14 +56,14 @@ def search_and_find(channel_name,picons):
 			return True
 	return False
 
-def maybetrythis(channel_name,picons,outputpath):
+def maybetrythis(channel_name,picons,outputpath,size):
 	found = False
 
 	for num in range(0,len(picons)):
 
 		if not picons[num].lower().find(channel_name.lower())== -1:
 			if(acceptreplace_sem):
-				print("Copy best matched picon for :" + channel_name)
+				print("Copy best matched picon for: " + channel_name)
 				run_cmd('cp "' + workfoldername +picons[num] + '" "' + outputpath + channel_name + '.png"')
 				found = True
 				break
@@ -71,9 +72,10 @@ def maybetrythis(channel_name,picons,outputpath):
 
 	if(not found and google_sem):
 			googleURL = downloader.google_download(channel_name.replace(" ","+"))
-			run_cmd('wget ' + googleURL + '  -O "' + outputpath + channel_name + '.png"')
-			imagemagix.convert_img(outputpath + channel_name + ".png")
-			time.sleep(2)
+			run_cmd('wget -q ' + googleURL + '  -O "' + outputpath + channel_name + '.png"')
+			imagemagix.convert_img(outputpath + channel_name + ".png",size)
+			print("Downloaded with googlesearch: " +channel_name)
+			time.sleep(0)
 
 
 def run_cmd(cmd):
@@ -90,6 +92,7 @@ if __name__ == '__main__':
 	parser.add_argument('-l','--lyngsatdwnl', help='Download from lyngsat', required=True)
 	parser.add_argument('-g','--googledwnl', help='Download from google search', required=True)
 	parser.add_argument('-e','--endline', help='Last channel name in the vdr channels.conf file', required=False)
+	parser.add_argument('-s','--size', help='Set the logo size (Default: 132x99)', required=False)
 	args = parser.parse_args()
 
 	if(not args.notfoundurl == ""):
@@ -101,4 +104,4 @@ if __name__ == '__main__':
 	if(args.googledwnl.lower() == "yes"):
 		google_sem = True
 
-	main(args.channels,args.country,args.outputpath,args.endline)
+	main(args.channels,args.country,args.outputpath,args.endline,args.size)
