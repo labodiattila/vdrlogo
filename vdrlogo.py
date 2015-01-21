@@ -1,6 +1,9 @@
 #!/usr/bin/python
 import downloader, imagemagix, re, time, argparse, os
 from subprocess import *
+import sys
+reload(sys)
+sys.setdefaultencoding("utf-8")
 
 logo_width = 132
 logo_height = 99
@@ -13,7 +16,7 @@ lyngsat_sem = False
 google_sem = False
 show_differences = False
 
-def main(vdrchannels,country_list,outputpath,endline,size):
+def main(vdrchannels,country_list,outputpath,endline,size,delay):
 		#create work folder, and delete old tempfiles
 		run_cmd("mkdir " + workfoldername)
 		run_cmd("mkdir " + outputpath)
@@ -28,11 +31,10 @@ def main(vdrchannels,country_list,outputpath,endline,size):
 		if(lyngsat_sem):
 			downloader.lyngsat_download(country_list)
 
+		clearing(channels,os.listdir(workfoldername),outputpath,endline,size,delay)
 
-		clearing(channels,os.listdir(workfoldername),outputpath,endline,size)
 
-
-def clearing(channels,picons,outputpath,endline,size):
+def clearing(channels,picons,outputpath,endline,size,delay):
 	for num in range(0,len(channels)):
 
 		if channels[num].find("->") == -1:
@@ -48,7 +50,7 @@ def clearing(channels,picons,outputpath,endline,size):
 			else:
 				print("Not Found: "+channel_name)
 				if not show_differences:
-					maybetrythis(channel_name,picons,outputpath,size)
+					maybetrythis(channel_name,picons,outputpath,size,delay)
 
 def search_and_find(channel_name,picons):
 	for num in range(0,len(picons)):
@@ -56,7 +58,7 @@ def search_and_find(channel_name,picons):
 			return True
 	return False
 
-def maybetrythis(channel_name,picons,outputpath,size):
+def maybetrythis(channel_name,picons,outputpath,size,delay):
 	found = False
 
 	for num in range(0,len(picons)):
@@ -74,9 +76,7 @@ def maybetrythis(channel_name,picons,outputpath,size):
 			googleURL = downloader.google_download(channel_name.replace(" ","+"))
 			run_cmd('wget -q ' + googleURL + '  -O "' + outputpath + channel_name + '.png"')
 			imagemagix.convert_img(outputpath + channel_name + ".png",size)
-			print("Downloaded with googlesearch: " +channel_name)
-			time.sleep(0)
-
+			time.sleep(int(delay))
 
 def run_cmd(cmd):
 	p = Popen(cmd, shell=True, stdout=PIPE)
@@ -93,6 +93,7 @@ if __name__ == '__main__':
 	parser.add_argument('-g','--googledwnl', help='Download from google search', required=True)
 	parser.add_argument('-e','--endline', help='Last channel name in the vdr channels.conf file', required=False)
 	parser.add_argument('-s','--size', help='Set the logo size (Default: 132x99)', required=False)
+	parser.add_argument('-d','--delay', help='Set the delay time(Between two google searching)', required=True)
 	args = parser.parse_args()
 
 	if(not args.notfoundurl == ""):
@@ -104,4 +105,4 @@ if __name__ == '__main__':
 	if(args.googledwnl.lower() == "yes"):
 		google_sem = True
 
-	main(args.channels,args.country,args.outputpath,args.endline,args.size)
+	main(args.channels,args.country,args.outputpath,args.endline,args.size,args.delay)
