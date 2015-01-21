@@ -35,7 +35,6 @@ def get_urls(source):
 			filename = source[num][lastslashposition:len(source[num])]
 
 			#Cleaning tools
-			print(filename)
 			if not(filename.find("_hu") == -1):
 				filename = filename.replace("hu","")
 			elif not(filename.find("_ro") == -1):
@@ -55,6 +54,7 @@ def get_urls(source):
 			
 
 def google_download(channel_name):
+	print(channel_name)
 	url = ('https://ajax.googleapis.com/ajax/services/search/images?' + 'v=1.0&q='+channel_name+'&as_filetype=png&as_sitesearch=http://www.lyngsat-logo.com')
 	request = urllib2.Request(url, None)
 	response = urllib2.urlopen(request)
@@ -64,8 +64,14 @@ def google_download(channel_name):
 	# now have some fun with the results...
 	try:
 		pix_url = results['responseData']['results'][0]['url']
-		return pix_url
+		if pix_url is not None:
+			print("Downloaded with googlesearch: " +channel_name)
+			return pix_url	
+		else:
+			return vdrlogo.not_found_URL
+		
 	except IndexError:
 		print("Not found on Google")
 		return vdrlogo.not_found_URL
+
 
