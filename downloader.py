@@ -7,7 +7,7 @@ def lyngsat_download(country_list):
 
 	for num in range(0,len(code_list)):
 		vdrlogo.run_cmd("wget -q " + vdrlogo.lyngsat_logo_URL + code_list[num] + ".html -O out.html")
-		vdrlogo.run_cmd('cat out.html | grep "../logo/tv" >> work.html')
+		vdrlogo.run_cmd('cat out.html | grep "\\../logo/tv" >> work.html')
 		vdrlogo.run_cmd("rm out.html")
 	
 	f = open("work.html")
